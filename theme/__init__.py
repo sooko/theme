@@ -218,6 +218,11 @@ class RootMenu(BoxLayout):
     pass
 class MenuButton(TouchRippleButtonBehavior,Label):
     pass
+class Btn(TouchRippleButtonBehavior,Label):
+    pass
+class BtnImg(TouchRippleButtonBehavior,Image):
+    pass
+
 class BtnMenu(ButtonBehavior,Image):
     pass
 class BtnOption(ButtonBehavior,Image):
