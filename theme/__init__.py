@@ -11,6 +11,7 @@ from kivy.uix.behaviors.touchripple import  TouchRippleButtonBehavior
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.app import App
+from kivy.clock import Clock
 Builder.load_string('''
 <RootMenu>:
     orientation:"vertical"
@@ -63,8 +64,8 @@ Builder.load_string('''
     ScrollView:        
         RootMenu:
             id:rm
-            on_parent:
-                root.add()
+            # on_parent:
+            #     root.add()
 <BtnMenu>:
 <stdTheme>:
     anim_type:"slide_above_simple"
@@ -274,11 +275,14 @@ class Menu(BoxLayout):
     server=StringProperty("")
     list_text=ListProperty(["home","acount","setting"])
     icon=StringProperty("asset/python.png")
+    clock=Clock
     def __init__(self,*args,**kwargs):
         super(Menu,self).__init__(**kwargs)
-    def add(self):
+        self.clock.schedule_once(self.delay,1)
+    def delay(self,dt):
         for i in self.list_text:
             self.ids["rm"].add_widget(MenuButton(text=i,on_press=self.on_menu_choose))
+
     def on_menu_choose(self,instance):
         print(instance.text)
 # class StdTheme(NavigationDrawer):
