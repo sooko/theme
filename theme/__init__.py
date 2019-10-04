@@ -71,12 +71,13 @@ Builder.load_string('''
 <BtnMenu>:
 
 <Navbar>:
+    line:1
     size_hint:.98,None
     height:"50sp"
     pos_hint:{"center_x":.5,"top":1}
     canvas:
         Color:
-            rgba:1,1,1,1
+            rgba:1,1,1,root.line
         Rectangle:
             size:self.width-1,1
             pos:self.x,self.y
@@ -97,6 +98,7 @@ Builder.load_string('''
         valign:"middle"
         text_size:self.size
         font_size:self.height/2.5
+        color:root.text_color
     BtnOption:
         color:root.option_button_color
         size_hint:None,1
@@ -109,12 +111,13 @@ Builder.load_string('''
             root.option_button_color[3]=1
             root.option_release+=1
 <NavbarConnect>:
+    line:1
     size_hint:.98,None
     height:"50sp"
     pos_hint:{"center_x":.5,"top":1}
     canvas:
         Color:
-            rgba:1,1,1,1
+            rgba:1,1,1,root.line
         Rectangle:
             size:self.width-1,1
             pos:self.x,self.y
@@ -147,13 +150,15 @@ Builder.load_string('''
             root.connect_button_color[3]=1
             root.connect_release+=1
 <NavbarConnectScan>:
+    text_color:0,1,1,1
+    line:1
     spacing:5
     size_hint:.98,None
     height:"50sp"
     pos_hint:{"center_x":.5,"top":1}
     canvas:
         Color:
-            rgba:1,1,1,1
+            rgba:1,1,1,root.line
         Rectangle:
             size:self.width-1,1
             pos:self.x,self.y
@@ -174,6 +179,7 @@ Builder.load_string('''
         valign:"middle"
         text_size:self.size
         font_size:self.height/2.5
+        color:root.text_color
     BtnOption:
         color:root.connect_button_color
         size_hint:None,1
@@ -228,6 +234,7 @@ class BtnMenu(ButtonBehavior,Image):
 class BtnOption(ButtonBehavior,Image):
     pass
 class NavBar(BoxLayout):
+    text_color=ListProperty([0,1,1,1])
     menu_press=NumericProperty(0)
     menu_release=NumericProperty(0)
     option_press=NumericProperty(0)
@@ -240,6 +247,8 @@ class NavBar(BoxLayout):
     option_button_color=ListProperty([1,1,1,1])
     def __init__(self,*args,**kwargs):
         super(NavBar,self).__init__(**kwargs)
+
+
 class NavBarConnect(BoxLayout):
     menu_press = NumericProperty(0)
     menu_release = NumericProperty(0)
@@ -290,16 +299,16 @@ class Menu(BoxLayout):
     def choose(self,data):
         # print(data)
         pass
-# class StdTheme(NavigationDrawer):
-#     def __init__(self,*args,**kwargs):
-#         super(StdTheme,self).__init__(**kwargs)
-#     def on_menu_release(self):
-#         self.toggle_state()
-#     def on_option_release(self):
-#         print("option_release")
-#
-# class Theme(App):
-#     def build(self):
-#         return StdTheme()
-# if __name__=="__main__":
-#     Theme().run()
+class StdTheme(NavigationDrawer):
+    def __init__(self,*args,**kwargs):
+        super(StdTheme,self).__init__(**kwargs)
+    def on_menu_release(self):
+        self.toggle_state()
+    def on_option_release(self):
+        print("option_release")
+
+class Theme(App):
+    def build(self):
+        return StdTheme()
+if __name__=="__main__":
+    Theme().run()
