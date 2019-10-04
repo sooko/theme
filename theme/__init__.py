@@ -13,6 +13,8 @@ from kivy.uix.image import Image
 from kivy.app import App
 from kivy.clock import Clock
 Builder.load_string('''
+
+        
 <RootMenu>:
     orientation:"vertical"
     size_hint:1,None
@@ -67,16 +69,7 @@ Builder.load_string('''
             # on_parent:
             #     root.add()
 <BtnMenu>:
-<stdTheme>:
-    anim_type:"slide_above_simple"
-    Menu:
-    BoxLayout:
-        orientation:"vertical"
-        NavBarConnectScan:
-            on_menu_release:root.on_menu_release()
-            on_connect_release:root.on_option_release()
-        Label
-        
+
 <Navbar>:
     size_hint:.98,None
     height:"50sp"
@@ -211,8 +204,15 @@ Builder.load_string('''
     Label:
         size_hint:None,1
         width:"5sp"
-    
-
+<stdTheme>:
+    anim_type:"slide_above_simple"
+    Menu:
+    BoxLayout:
+        orientation:"vertical"
+        NavBarConnectScan:
+            on_menu_release:root.on_menu_release()
+            on_connect_release:root.on_option_release()
+        FloatLayout:
 ''')
 class RootMenu(BoxLayout):
     pass
@@ -222,9 +222,6 @@ class BtnMenu(ButtonBehavior,Image):
     pass
 class BtnOption(ButtonBehavior,Image):
     pass
-# class Btn(ButtonBehavior,Image):
-#     pass
-
 class NavBar(BoxLayout):
     menu_press=NumericProperty(0)
     menu_release=NumericProperty(0)
