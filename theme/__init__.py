@@ -101,8 +101,9 @@ Builder.load_string('''
         color:root.text_color
     BtnOption:
         color:root.option_button_color
-        size_hint:None,1
-        width:"40sp"
+        size_hint:None,.4
+        pos_hint:{"center_x":.5,"center_y":.5}
+        width:"30sp"
         source:root.option_button_image
         on_press:
             root.option_button_color[3]=.1
