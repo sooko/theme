@@ -286,17 +286,18 @@ class Menu(BoxLayout):
     def on_menu_choose(self,instance):
         self.choose(instance.text)
     def choose(self,data):
-        print(data)
-class StdTheme(NavigationDrawer):
-    def __init__(self,*args,**kwargs):
-        super(StdTheme,self).__init__(**kwargs)
-    def on_menu_release(self):
-        self.toggle_state()
-    def on_option_release(self):
-        print("option_release")
-
-class Theme(App):
-    def build(self):
-        return StdTheme()
-if __name__=="__main__":
-    Theme().run()
+        # print(data)
+        pass
+# class StdTheme(NavigationDrawer):
+#     def __init__(self,*args,**kwargs):
+#         super(StdTheme,self).__init__(**kwargs)
+#     def on_menu_release(self):
+#         self.toggle_state()
+#     def on_option_release(self):
+#         print("option_release")
+#
+# class Theme(App):
+#     def build(self):
+#         return StdTheme()
+# if __name__=="__main__":
+#     Theme().run()
