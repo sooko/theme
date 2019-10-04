@@ -281,16 +281,16 @@ class Menu(BoxLayout):
             self.ids["rm"].add_widget(MenuButton(text=i,on_press=self.on_menu_choose))
     def on_menu_choose(self,instance):
         print(instance.text)
-class StdTheme(NavigationDrawer):
-    def __init__(self,*args,**kwargs):
-        super(StdTheme,self).__init__(**kwargs)
-    def on_menu_release(self):
-        self.toggle_state()
-    def on_option_release(self):
-        print("option_release")
-
-class Theme(App):
-    def build(self):
-        return StdTheme()
-if __name__=="__main__":
-    Theme().run()
+# class StdTheme(NavigationDrawer):
+#     def __init__(self,*args,**kwargs):
+#         super(StdTheme,self).__init__(**kwargs)
+#     def on_menu_release(self):
+#         self.toggle_state()
+#     def on_option_release(self):
+#         print("option_release")
+#
+# class Theme(App):
+#     def build(self):
+#         return StdTheme()
+# if __name__=="__main__":
+#     Theme().run()
