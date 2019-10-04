@@ -71,9 +71,9 @@ Builder.load_string('''
     Menu:
     BoxLayout:
         orientation:"vertical"
-        NavBar:
+        NavBarConnectScan:
             on_menu_release:root.on_menu_release()
-            on_option_release:root.on_option_release()
+            on_connect_release:root.on_option_release()
         Label
         
 <Navbar>:
@@ -114,6 +114,104 @@ Builder.load_string('''
         on_release:
             root.option_button_color[3]=1
             root.option_release+=1
+<NavbarConnect>:
+    size_hint:.98,None
+    height:"50sp"
+    pos_hint:{"center_x":.5,"top":1}
+    canvas:
+        Color:
+            rgba:1,1,1,1
+        Rectangle:
+            size:self.width-1,1
+            pos:self.x,self.y
+    BtnMenu:
+        color:root.menu_button_color
+        size_hint:None,1
+        width:"36sp"
+        source:root.menu_button_image
+        on_press:
+            root.menu_button_color[3]=.1
+            root.menu_press+=1
+        on_release:
+            root.menu_button_color[3]=1
+            root.menu_release+=1
+    Label:
+        text:root.text
+        halign:"left"
+        valign:"middle"
+        text_size:self.size
+        font_size:self.height/2.5
+    BtnOption:
+        color:root.connect_button_color
+        size_hint:None,1
+        width:"40sp"
+        source:root.connect_button_image
+        on_press:
+            root.connect_button_color[3]=.1
+            root.connect_press+=1
+        on_release:
+            root.connect_button_color[3]=1
+            root.connect_release+=1
+<NavbarConnectScan>:
+    spacing:5
+    size_hint:.98,None
+    height:"50sp"
+    pos_hint:{"center_x":.5,"top":1}
+    canvas:
+        Color:
+            rgba:1,1,1,1
+        Rectangle:
+            size:self.width-1,1
+            pos:self.x,self.y
+    BtnMenu:
+        color:root.menu_button_color
+        size_hint:None,1
+        width:"36sp"
+        source:root.menu_button_image
+        on_press:
+            root.menu_button_color[3]=.1
+            root.menu_press+=1
+        on_release:
+            root.menu_button_color[3]=1
+            root.menu_release+=1
+    Label:
+        text:root.text
+        halign:"left"
+        valign:"middle"
+        text_size:self.size
+        font_size:self.height/2.5
+    BtnOption:
+        color:root.connect_button_color
+        size_hint:None,1
+        width:"40sp"
+        source:root.connect_button_image
+        on_press:
+            root.connect_button_color[3]=.1
+            root.connect_press+=1
+        on_release:
+            root.connect_button_color[3]=1
+            root.connect_release+=1
+    Label:
+        size_hint:None,1
+        width:"5sp"
+    BtnOption:
+        color:root.scan_button_color
+        size_hint:None,None
+        width:"25sp"
+        height:"25sp"
+        source:root.scan_button_image
+        on_press:
+            root.scan_button_color[3]=.1
+            root.scan_press+=1
+        on_release:
+            root.scan_button_color[3]=.8
+            root.scan_release+=1
+        pos_hint:{"center_x":.5,"center_y":.5}
+    Label:
+        size_hint:None,1
+        width:"5sp"
+    
+
 ''')
 class RootMenu(BoxLayout):
     pass
@@ -123,6 +221,9 @@ class BtnMenu(ButtonBehavior,Image):
     pass
 class BtnOption(ButtonBehavior,Image):
     pass
+# class Btn(ButtonBehavior,Image):
+#     pass
+
 class NavBar(BoxLayout):
     menu_press=NumericProperty(0)
     menu_release=NumericProperty(0)
@@ -136,6 +237,38 @@ class NavBar(BoxLayout):
     option_button_color=ListProperty([1,1,1,1])
     def __init__(self,*args,**kwargs):
         super(NavBar,self).__init__(**kwargs)
+class NavBarConnect(BoxLayout):
+    menu_press = NumericProperty(0)
+    menu_release = NumericProperty(0)
+    connect_press = NumericProperty(0)
+    connect_release = NumericProperty(0)
+    text = StringProperty("myapp")
+    child = StringProperty("")
+    menu_button_image = StringProperty("asset/3btn.png")
+    menu_button_color = ListProperty([1, 1, 1, 1])
+    connect_button_image = StringProperty("asset/disconnect.png")
+    connect_button_color = ListProperty([1, 1, 1, 1])
+    def __init__(self, *args, **kwargs):
+        super(NavBarConnect, self).__init__(**kwargs)
+class NavBarConnectScan(BoxLayout):
+    scan_press=NumericProperty(0)
+    scan_release=NumericProperty(0)
+    menu_press = NumericProperty(0)
+    menu_release = NumericProperty(0)
+    connect_press = NumericProperty(0)
+    connect_release = NumericProperty(0)
+    text = StringProperty("myapp")
+    child = StringProperty("")
+    menu_button_image = StringProperty("asset/3btn.png")
+    menu_button_color = ListProperty([1, 1, 1, 1])
+    connect_button_image = StringProperty("asset/disconnect.png")
+    connect_button_color = ListProperty([1, 1, 1, 1])
+    scan_button_image = StringProperty("asset/qr.png")
+    scan_button_color = ListProperty([1, 1, 1, .8])
+
+    def __init__(self, *args, **kwargs):
+        super(NavBarConnectScan, self).__init__(**kwargs)
+
 class Menu(BoxLayout):
     user_name=StringProperty("")
     server=StringProperty("")
@@ -148,16 +281,16 @@ class Menu(BoxLayout):
             self.ids["rm"].add_widget(MenuButton(text=i,on_press=self.on_menu_choose))
     def on_menu_choose(self,instance):
         print(instance.text)
-# class StdTheme(NavigationDrawer):
-#     def __init__(self,*args,**kwargs):
-#         super(StdTheme,self).__init__(**kwargs)
-#     def on_menu_release(self):
-#         self.toggle_state()
-#     def on_option_release(self):
-#         print("option_release")
-#
-# class Theme(App):
-#     def build(self):
-#         return StdTheme()
-# if __name__=="__main__":
-#     Theme().run()
+class StdTheme(NavigationDrawer):
+    def __init__(self,*args,**kwargs):
+        super(StdTheme,self).__init__(**kwargs)
+    def on_menu_release(self):
+        self.toggle_state()
+    def on_option_release(self):
+        print("option_release")
+
+class Theme(App):
+    def build(self):
+        return StdTheme()
+if __name__=="__main__":
+    Theme().run()
