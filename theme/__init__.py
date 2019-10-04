@@ -103,7 +103,7 @@ Builder.load_string('''
         color:root.option_button_color
         size_hint:None,.4
         pos_hint:{"center_x":.5,"center_y":.5}
-        width:"30sp"
+        width:"10sp"
         source:root.option_button_image
         on_press:
             root.option_button_color[3]=.1
@@ -216,7 +216,7 @@ Builder.load_string('''
     Menu:
     BoxLayout:
         orientation:"vertical"
-        NavBarConnectScan:
+        NavBar:
             on_menu_release:root.on_menu_release()
             on_connect_release:root.on_option_release()
         FloatLayout:
@@ -300,16 +300,16 @@ class Menu(BoxLayout):
     def choose(self,data):
         # print(data)
         pass
-# class StdTheme(NavigationDrawer):
-#     def __init__(self,*args,**kwargs):
-#         super(StdTheme,self).__init__(**kwargs)
-#     def on_menu_release(self):
-#         self.toggle_state()
-#     def on_option_release(self):
-#         print("option_release")
-#
-# class Theme(App):
-#     def build(self):
-#         return StdTheme()
-# if __name__=="__main__":
-#     Theme().run()
+class StdTheme(NavigationDrawer):
+    def __init__(self,*args,**kwargs):
+        super(StdTheme,self).__init__(**kwargs)
+    def on_menu_release(self):
+        self.toggle_state()
+    def on_option_release(self):
+        print("option_release")
+
+class Theme(App):
+    def build(self):
+        return StdTheme()
+if __name__=="__main__":
+    Theme().run()
