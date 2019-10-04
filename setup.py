@@ -3,7 +3,7 @@ from setuptools import setup
 setup(name='theme',
       version='0.1',
       description='theme',
-      url='https://github.com/sooko/twis.git',
+      url='https://github.com/sooko/theme.git',
       author='Burhan',
       author_email='hansmotor89@gmail.com',
       license='MIT',
