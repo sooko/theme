@@ -11,10 +11,135 @@ from kivy.uix.behaviors.touchripple import  TouchRippleButtonBehavior
 from kivy.uix.label import Label
 from kivy.uix.image import Image
 from kivy.app import App
+from kivy.uix.screenmanager import ScreenManager,Screen
+from kivy.event import EventDispatcher
 from kivy.clock import Clock
-Builder.load_string('''
 
-        
+Builder.load_string('''
+<AcountScreen>:
+    pos_hint:{"center_x": .5, "center_y": self.pos_anim}
+    Button:
+        pos_hint:{"center_x":.5,"center_y":.5}
+        background_color:0,0,0,.8
+        # on_press:root.pos_hint={"center_x":.5,"center_y":5}
+    Button:
+        size_hint:ac.size_hint
+        pos_hint:ac.pos_hint
+        background_color:0,0,0,0
+        height:ac.height
+    BoxLayout:
+        spacing:10
+        id:ac
+        size_hint:.9,None
+        pos_hint:{"center_x":.5,"y":.5}
+        orientation:"vertical"
+        height:self.minimum_height
+        Label:
+            pos_hint:{"center_x":.5,"center_y":.5}
+            size_hint:.5,None
+            height:"1sp"
+        Label:
+            size_hint:1,None
+            height:"10sp"
+            font_size:self.height/1.5
+            color:0,1,1,1
+        Label:
+            size_hint:1,None
+            height:"30sp"
+            text:"user name :"
+            font_size:self.height/1.5
+            color:0,1,1,1
+        TextInput
+            id:ti_user_name
+            text:root.user_name
+            size_hint:.5,None
+            height:"30sp"
+            background_color:0,0,0,0
+            pos_hint:{"center_x":.5,"center_y":.5}
+            foreground_color:1,1,1,1
+            multiline:False
+            keyboard_suggestions:True
+            canvas.after:
+                Color:
+                    rgba:1,1,1,.5
+                Rectangle:
+                    size:self.width,1
+                    pos:self.pos
+        Label:
+            size_hint:1,None
+            height:"30sp"
+            text:"server :"
+            font_size:self.height/1.5
+            color:0,1,1,1
+        TextInput:
+            text:root.server
+            id:ti_server
+            size_hint:.5,None
+            height:"30sp"
+            background_color:0,0,0,0
+            pos_hint:{"center_x":.5,"center_y":.5}
+            foreground_color:1,1,1,1
+            multiline:False
+            keyboard_suggestions:True
+            canvas.after:
+                Color:
+                    rgba:1,1,1,.5
+                Rectangle:
+                    size:self.width,1
+                    pos:self.pos
+        BoxLayout:
+            orientation:"vertical"
+            pos_hint:{"center_x":.5,"center_y":.5}
+            size_hint:.9,None
+            height:"60sp"
+        BoxLayout:
+            pos_hint:{"center_x":.5,"center_y":.5}
+            size_hint:.9,None
+            height:"30sp"
+            spacing:10
+            Button:
+                warna:.1
+                canvas.before:
+                    Color:
+                        rgba:1,1,1,self.warna
+                    RoundedRectangle:
+                        size:self.size
+                        pos:self.pos
+                text:"exit"
+                background_color:0,0,0,0
+                color:0,1,1,1
+                on_press:
+                    self.warna=1
+                    self.color=0,0,0,1
+                on_release:
+                    self.warna=.1
+                    self.color=0,1,1,1
+                    root.exit(self)
+            Button:
+                color:0,1,1,1
+                warna:.1
+                canvas.before:
+                    Color:
+                        rgba:1,1,1,self.warna
+                    RoundedRectangle:
+                        size:self.size
+                        pos:self.pos
+                text:"set"
+                background_color:0,0,0,0
+                on_press:
+                    self.warna=1
+                    self.color=0,0,0,1
+                on_release:
+                    self.warna=.1
+                    self.color=0,1,1,1
+                    root.set([ti_user_name.text,ti_server.text])
+        BoxLayout:
+            orientation:"vertical"
+            pos_hint:{"center_x":.5,"center_y":.5}
+            size_hint:.9,None
+            height:"30sp"
+            
+            
 <RootMenu>:
     orientation:"vertical"
     size_hint:1,None
@@ -217,10 +342,27 @@ Builder.load_string('''
     BoxLayout:
         orientation:"vertical"
         NavBar:
-            on_menu_release:root.on_menu_release()
-            on_connect_release:root.on_option_release()
-        FloatLayout:
+            # on_menu_release:root.on_menu_release()
+            # on_connect_release:root.on_option_release()
+        AcountScreen:
 ''')
+class AcountScreen(FloatLayout,EventDispatcher):
+    pos_anim = NumericProperty(.5)
+    user_name=StringProperty("")
+    server=StringProperty("")
+    def __init__(self,*args,**kwargs):
+        self.register_event_type('on_set')
+        self.register_event_type('on_exit')
+        super(AcountScreen,self).__init__(**kwargs)
+    def set(self,a):
+        self.dispatch('on_set', a)
+    def exit(self,a):
+        self.dispatch('on_exit', a)
+    def on_set(self,data):
+        # print(data)
+        pass
+    def on_exit(self,data):
+        pass
 class RootMenu(BoxLayout):
     pass
 class MenuButton(TouchRippleButtonBehavior,Label):
@@ -248,8 +390,6 @@ class NavBar(BoxLayout):
     option_button_color=ListProperty([1,1,1,1])
     def __init__(self,*args,**kwargs):
         super(NavBar,self).__init__(**kwargs)
-
-
 class NavBarConnect(BoxLayout):
     menu_press = NumericProperty(0)
     menu_release = NumericProperty(0)
@@ -278,7 +418,6 @@ class NavBarConnectScan(BoxLayout):
     connect_button_color = ListProperty([1, 1, 1, 1])
     scan_button_image = StringProperty("asset/qr.png")
     scan_button_color = ListProperty([1, 1, 1, .8])
-
     def __init__(self, *args, **kwargs):
         super(NavBarConnectScan, self).__init__(**kwargs)
 
