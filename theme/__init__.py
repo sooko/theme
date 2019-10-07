@@ -21,43 +21,43 @@ from kivy.uix.behaviors import ButtonBehavior, ToggleButtonBehavior
 from kivy.uix.image import Image
 from kivy.properties import StringProperty, NumericProperty, ListProperty
 from kivy.uix.floatlayout import FloatLayout
-
+# menu_button_image = StringProperty("asset/3btn.png")
+#     menu_button_color = ListProperty([1, 1, 1, 1])
+#     connect_button_image = StringProperty("asset/disconnect.png")
+#     connect_button_color = ListProperty([1, 1, 1, 1])
 Builder.load_string('''
 <NavbarScan>:
     size_hint:1,None
     height:"30sp"
     BtnImg:
         color:root.btn_menu_color
-        source:"asset/3btn.png"    
+        source:root.menu_button_image
         size_hint:None,1
         width:"30sp"
         on_press:
-            self.color=0,1,1,.5
-            root.on_press_menu()
+            root.menu_button_color[3]=.1
+            root.menu_press(self)
         on_release:
-            self.color=root.btn_menu_color
-            root.on_release_menu()
+            root.menu_button_color[3]=1
+            root.menu_release(self)
     Label
-        text:root.app_name
+        text:root.text
         font_size:self.height/1.5
         halign:"right"
         valign:"middle"
         text_size:self.size
-        color:root.app_name_color
+        color:root.text_color
     Label:
         size_hint:None,1
         width:"10sp"
     BtnImg:
-        id:qrbtn
-        color:root.btn_menu_color
-        source:"asset/qr.png"    
+        source:root.scan_button_image
         size_hint:None,1
         width:"20sp"
         on_press:
-            self.color=0,1,1,.5
-            root.scanbtn+=1
+            root.scan_button_color[3]=.1
         on_release:
-            self.color=root.btn_menu_color
+            root.scan_button_color[3]=1
 
 <AcountScreen>:
     pos_hint:{"center_x": .5, "center_y": self.pos_anim}
@@ -482,55 +482,38 @@ class Menu(BoxLayout):
     def choose(self,data):
         # print(data)
         pass
-# class StdTheme(NavigationDrawer):
-#     def __init__(self,*args,**kwargs):
-#         super(StdTheme,self).__init__(**kwargs)
-#     def on_menu_release(self):
-#         self.toggle_state()
-#     def on_option_release(self):
-#         print("option_release")
-#
-# class Theme(App):
-#     def build(self):
-#         return StdTheme()
-# if __name__=="__main__":
-#     Theme().run()
 
 
-
-Builder.load_string('''
-
-
-
-''')
 
 #
 # class BtnImg(ButtonBehavior, Image):
 #     pass
 
 
-class NavBarScan(BoxLayout):
-    scanbtn = NumericProperty(0)
-    menu_pressed = StringProperty("normal")
-    menu_released = StringProperty("down")
-    app_name = StringProperty("My Aplication")
+class NavBarScan(BoxLayout,EventDispatcher):
+    text_color=ListProperty([1,1,1,1])
+    text = StringProperty("My Aplication")
     btn_menu_color = ListProperty([1, 1, 1, 1])
-    app_name_color = ListProperty([1, 1, 1, 1])
-
+    menu_button_image = StringProperty("asset/3btn.png")
+    menu_button_color = ListProperty([1, 1, 1, 1])
+    scan_button_color = ListProperty([1, 1, 1, 1])
+    scan_button_image = StringProperty("asset/3dot.png")
     def __init__(self, *args, **kwargs):
-        super(NavBar, self).__init__(*args, **kwargs)
+        self.register_event_type("on_menu_press")
+        self.register_event_type("on_menu_release")
+        super(NavBarScan, self).__init__(*args, **kwargs)
+    def menu_press(self,a):
+        self.dispatch("on_menu_press",a)
+    def menu_release(self,a):
+        self.dispatch("on_menu_release",a)
+    def on_menu_press(self,data):
+        print("menu_pressed")
+    def on_menu_release(self,data):
+        print("menu_releaseed")
 
-    def on_press_menu(self):
-        self.menu_pressed = "down"
-        self.menu_released = "normal"
-
-    def on_release_menu(self):
-        self.menu_released = "down"
-        self.menu_pressed = "normal"
-
-    def press(self, a, b):
-        print(a, b)
-
-    def on_scanbtn(self, a, b):
-        pass
+class Theme(App):
+    def build(self):
+        return NavBarScan()
+if __name__=="__main__":
+    Theme().run()
 
