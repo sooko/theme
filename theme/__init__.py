@@ -489,7 +489,6 @@ class Menu(BoxLayout):
 # class BtnImg(ButtonBehavior, Image):
 #     pass
 
-
 class NavBarScan(BoxLayout,EventDispatcher):
     text_color=ListProperty([1,1,1,1])
     text = StringProperty("My Aplication")
@@ -510,10 +509,9 @@ class NavBarScan(BoxLayout,EventDispatcher):
         print("menu_pressed")
     def on_menu_release(self,data):
         print("menu_releaseed")
-
-class Theme(App):
-    def build(self):
-        return NavBarScan()
-if __name__=="__main__":
-    Theme().run()
-
+# class Theme(App):
+#     def build(self):
+#         return NavBarScan()
+# if __name__=="__main__":
+#     Theme().run()
+#
