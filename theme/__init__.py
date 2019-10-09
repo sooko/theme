@@ -30,7 +30,7 @@ Builder.load_string('''
     size_hint:1,None
     height:"30sp"
     BtnImg:
-        color:root.btn_menu_color
+        color:root.menu_button_color
         source:root.menu_button_image
         size_hint:None,1
         width:"30sp"
@@ -40,9 +40,10 @@ Builder.load_string('''
         on_release:
             root.menu_button_color[3]=1
             root.menu_release(self)
+            
     Label
         text:root.text
-        font_size:self.height/1.5
+        font_size:self.height/2.5
         halign:"right"
         valign:"middle"
         text_size:self.size
@@ -53,11 +54,12 @@ Builder.load_string('''
     BtnImg:
         source:root.scan_button_image
         size_hint:None,1
+        color:root.scan_button_color
         width:"20sp"
-        on_press:
-            root.scan_button_color[3]=.1
-        on_release:
-            root.scan_button_color[3]=1
+        # on_press:
+        #     # root.scan_button_color[3]=.1
+        # on_release:
+        #     # root.scan_button_color[3]=1
 
 <AcountScreen>:
     pos_hint:{"center_x": .5, "center_y": self.pos_anim}
@@ -409,7 +411,11 @@ class AcountScreen(FloatLayout,EventDispatcher):
 class RootMenu(BoxLayout):
     pass
 class MenuButton(TouchRippleButtonBehavior,Label):
-    pass
+    data=StringProperty("")
+    def __init__(self,*args,**kwargs):
+        super(MenuButton,self).__init__(**kwargs)
+
+
 class Btn(TouchRippleButtonBehavior,Label):
     pass
 class BtnImg(TouchRippleButtonBehavior,Image):
@@ -468,21 +474,23 @@ class Menu(BoxLayout):
     user_name=StringProperty("")
     server=StringProperty("")
     list_text=ListProperty(["home","acount","setting"])
+    list_data=ListProperty(["a","b","c"])
     icon=StringProperty("asset/python.png")
     clock=Clock
     def __init__(self,*args,**kwargs):
         super(Menu,self).__init__(**kwargs)
         self.clock.schedule_once(self.delay,1)
     def delay(self,dt):
-        for i in self.list_text:
-            self.ids["rm"].add_widget(MenuButton(text=i,on_press=self.on_menu_choose))
+        for i in range(len(self.list_text)):
+            self.ids["rm"].add_widget(MenuButton(data=self.list_data[i],text=self.list_text[i],on_press=self.on_menu_choose))
 
     def on_menu_choose(self,instance):
         self.choose(instance.text)
+        self.choose_data(instance.data)
     def choose(self,data):
-        # print(data)
         pass
-
+    def choose_data(self,data):
+        pass
 
 
 #
@@ -511,7 +519,7 @@ class NavBarScan(BoxLayout,EventDispatcher):
         print("menu_releaseed")
 # class Theme(App):
 #     def build(self):
-#         return NavBarScan()
+#         return Menu()
 # if __name__=="__main__":
 #     Theme().run()
-#
+
